@@ -1,0 +1,61 @@
+name: AI Code Review
+description: Run AI-powered code review on pull requests using Claude
+
+inputs:
+  anthropic-api-key:
+    description: Anthropic API Key
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 1
+
+    - name: Run AI Code Review
+      uses: anthropics/claude-code-action@v1
+      with:
+        anthropic_api_key: ${{ inputs.anthropic-api-key }}
+        use_sticky_comment: true
+        track_progress: true
+        claude_args: |
+          --model claude-sonnet-4-5
+          --allowed-tools Read,GrepTool,LS,Glob,mcp__github_file_ops__update_claude_comment,mcp__github__get_pull_request_reviews,mcp__github__get_pull_request_review_comments,mcp__github_file_ops__delete_claude_comment,mcp__github__add_comment_to_pending_review,mcp__github__create_pending_pull_request_review,mcp__github__add_pull_request_review_comment_to_pending_review,mcp__github__submit_pending_pull_request_review,mcp__github__get_pull_request_diff
+        prompt: |
+          TASK:
+          - Please review this pull request and provide comprehensive feedback. Focus on being constructive and helpful.
+
+          WORKFLOW:
+          1. Use `mcp__github__get_pull_request_diff` to analyze all changes in the PR
+          2. Analyze previous comments, reviews and inline comments for the current Pull Request
+          3. **Add inline comments**: Use `mcp__github__add_pull_request_review_comment_to_pending_review` for each specific piece of feedback on particular lines, excluding those which already have comments.
+          4. If there are any new issues or if there is no claude review yet, then submit a new review with COMMENT type. Otherwise skip this step
+
+          REVIEW GUIDELINES:
+          - Provide specific suggestions for improvement
+          - IMPORTANT: Only provide code suggestions if you are confident they won't break the code.
+            ```suggestion
+            // your suggested code here
+            ```
+          - Reference relevant files and line numbers when possible
+          - Consider the context of the changes
+          - Look for potential bugs or issues
+          - Suggest better patterns or approaches when appropriate
+          - Check for consistency with existing code style
+          - Only leave comments on what should be fixed
+
+          RESTRICTIONS:
+          - Do not make direct code changes (read-only review)
+          - Focus on providing feedback and suggestions
+          - DO NOT mention any usernames in any of the comments, including "Claude finished user X task"
+          - Be respectful and constructive in your comments
+          - **Important**: Submit the review as "COMMENT" type so that it doesn't block the PR.
+          - Consider the developer's intent and context
+          - Avoid inline comments which only praise something
+          - Inline comments should only contain actionable feedback or potential issues/improvements
+          - Avoid duplicated inline comments. Create a new inline comment, only if the issue was not highlighted by a previous reviewer.
+
+          PROJECT-SPECIFIC RULES AND STANDARDS:
+          Project specific rules, standards and guidelines are extracted from the project's CLAUDE.md file and MUST be followed when reviewing code.
