@@ -24,8 +24,10 @@ runs:
           --model claude-sonnet-4-5
           --allowed-tools Read,GrepTool,LS,Glob,mcp__github_file_ops__update_claude_comment,mcp__github__get_pull_request_reviews,mcp__github__get_pull_request_review_comments,mcp__github_file_ops__delete_claude_comment,mcp__github__add_comment_to_pending_review,mcp__github__create_pending_pull_request_review,mcp__github__add_pull_request_review_comment_to_pending_review,mcp__github__submit_pending_pull_request_review,mcp__github__get_pull_request_diff
         prompt: |
-          TASK:
-          - Please review this pull request and provide comprehensive feedback. Focus on being constructive and helpful.
+          REPO: ${{ github.repository }}
+          PR NUMBER: ${{ github.event.pull_request.number }}
+          
+          Review this pull request and provide comprehensive feedback. Focus on being constructive and helpful.
 
           WORKFLOW:
           1. Use `mcp__github__get_pull_request_diff` to analyze all changes in the PR
