@@ -6,7 +6,7 @@ A collection of AI-related GitHub actions.
 
 ### AI Code Review
 
-Review a PR using Anthropics Claude Code GitHub action.
+Review a PR using Anthropic Claude Code GitHub action.
 
 #### Example
 
@@ -24,7 +24,17 @@ The following inputs can be used as `step.with` keys:
 |---------------------|------------------|-------------------|
 | `anthropic-api-key` | required         | Anthropic API Key |
 
+#### Permissions
+
+The action requires the following permissions:
+
+- `contents: write`
+- `pull-requests: write`
+- `id-token: write`
+
 #### Example: Workflow
+
+This example shows how to trigger the action on a PR comment, which contains the word "ai review".
 
 ```
 jobs:
@@ -40,11 +50,6 @@ jobs:
       id-token: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 1
-
       - name: Run AI Code Review
         uses: aboutbits/ai-code-review@v1
         with:
