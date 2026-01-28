@@ -11,9 +11,6 @@ runs:
   steps:
     - name: Checkout repository
       uses: actions/checkout@v6
-      with:
-        fetch-depth: 1
-
     - name: Run AI Code Review
       uses: anthropics/claude-code-action@v1
       with:
