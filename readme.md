@@ -11,7 +11,7 @@ Review a PR using Anthropic Claude Code GitHub action.
 #### Example
 
 ```yaml
-  - uses: aboutbits/ai-code-review@v1
+  - uses: aboutbits/github-actions-ai/ai-code-review@v1
     with:
       anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
 ```
