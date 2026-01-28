@@ -31,7 +31,7 @@ runs:
 
           WORKFLOW:
           1. Use `mcp__github__get_pull_request_diff` to analyze all changes in the PR
-          2. Analyze previous comments, reviews and inline comments for the current Pull Request
+          2. Analyze previous comments, reviews and inline comments for the current pull request
           3. **Add inline comments**: Use `mcp__github__add_pull_request_review_comment_to_pending_review` for each specific piece of feedback on particular lines, excluding those which already have comments.
           4. If there are any new issues or if there is no claude review yet, then submit a new review with COMMENT type. Otherwise skip this step
 
